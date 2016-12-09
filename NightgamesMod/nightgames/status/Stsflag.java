@@ -70,5 +70,6 @@ public enum Stsflag {
     maglocked, 
     hogtied, 
     collared,
-    channeling
+    channeling,
+    disabling
 }
