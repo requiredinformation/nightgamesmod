@@ -8,6 +8,7 @@ import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.nskills.tags.SkillTag;
 import nightgames.skills.damage.DamageType;
+import nightgames.status.Stsflag;
 
 public class MagicMissile extends Skill {
 
@@ -30,7 +31,8 @@ public class MagicMissile extends Skill {
 
     @Override
     public int getMojoCost(Combat c) {
-        return 5;
+        double bonus = getSelf().is(Stsflag.channeling) ? 1.5 : 1;
+        return (int) Math.ceil(5*bonus);
     }
 
     @Override
@@ -41,7 +43,8 @@ public class MagicMissile extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         if (target.roll(getSelf(), c, accuracy(c, target))) {
-            double m = Global.random(10, 20);
+            int bonus = getSelf().is(Stsflag.channeling) ? 2 : 1;
+            double m = Global.random(10*bonus, 20*bonus);
             if (target.mostlyNude() && Global.random(3) == 2) {
                 writeOutput(c, Result.critical, target);
                 m *= 2;

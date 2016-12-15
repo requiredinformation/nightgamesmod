@@ -7,6 +7,7 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.skills.damage.DamageType;
+import nightgames.status.Channeling;
 
 public class Wait extends Skill {
 
@@ -40,6 +41,7 @@ public class Wait extends Skill {
             } else {
                 getSelf().heal(c, (int) getSelf().modifyDamage(DamageType.physical, Global.noneCharacter(), Global.random(4, 8)));
             }
+            getSelf().add(c, new Channeling(getSelf(), 1));
         } else if (focused(c)) {
             writeOutput(c, Result.strong, target);
             getSelf().heal(c, (int) getSelf().modifyDamage(DamageType.physical, Global.noneCharacter(), Global.random(8, 16)));
