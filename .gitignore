@@ -8,3 +8,7 @@ out
 CombatStats*
 NightgamesMod/.settings
 combatlogs
+bin
+.project
+.classpath
+ng-dev.jar
