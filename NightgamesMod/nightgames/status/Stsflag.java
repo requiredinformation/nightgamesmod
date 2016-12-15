@@ -71,5 +71,7 @@ public enum Stsflag {
     hogtied, 
     collared,
     channeling,
-    disabling
+    disabling,
+    pheromones,
+    piercingOdor
 }
