@@ -9,6 +9,7 @@ import nightgames.combat.Combat;
 import nightgames.combat.Result;
 import nightgames.global.Global;
 import nightgames.status.Hypersensitive;
+import nightgames.status.Stsflag;
 
 public class CockGrowth extends Skill {
     public CockGrowth(Character self) {
@@ -37,7 +38,8 @@ public class CockGrowth extends Skill {
 
     @Override
     public int getMojoCost(Combat c) {
-        return 25;
+        double bonus = getSelf().is(Stsflag.channeling) ? 1.5 : 1;
+        return (int) Math.ceil(25*bonus);
     }
 
     @Override
@@ -48,29 +50,35 @@ public class CockGrowth extends Skill {
     @Override
     public boolean resolve(Combat c, Character target) {
         Result res = target.roll(getSelf(), c, accuracy(c, target)) ? Result.normal : Result.miss;
+        int bonus = getSelf().is(Stsflag.channeling) ? 2 : 0;
+
         if (res == Result.normal && !target.hasDick()) {
             res = Result.special;
         }
 
-        boolean permanent = Global.random(20) == 0 && (getSelf().human() || c.shouldPrintReceive(target, c))
+        boolean permanent = Global.random(20 - 8*bonus) == 0 && (getSelf().human() || c.shouldPrintReceive(target, c))
                         && !target.has(Trait.stableform);
 
         if (res != Result.miss) {
             target.add(c, new Hypersensitive(target, 10));
-            CockPart part = target.body.getCockBelow(BasicCockPart.massive.size);
-            if (permanent) {
-                if (part != null) {
-                    target.body.addReplace(part.upgrade(), 1);
+            do {
+                CockPart part = target.body.getCockBelow(BasicCockPart.massive.size);
+                if (permanent) {
+                    if (part != null) {
+                        target.body.addReplace(part.upgrade(), 1);
+                    } else {
+                        target.body.addReplace(BasicCockPart.small, 1);
+                    }
                 } else {
-                    target.body.addReplace(BasicCockPart.small, 1);
+                    if (part != null) {
+                        target.body.temporaryAddOrReplacePartWithType(part.upgrade(), 10);
+                    } else {
+                        target.body.temporaryAddPart(BasicCockPart.small, 10);
+                    }
                 }
-            } else {
-                if (part != null) {
-                    target.body.temporaryAddOrReplacePartWithType(part.upgrade(), 10);
-                } else {
-                    target.body.temporaryAddPart(BasicCockPart.small, 10);
-                }
-            }
+                if (bonus > 0)
+                    bonus--;
+            } while (bonus > 0);
         }
         writeOutput(c, permanent ? 1 : 0, res, target);
         return res != Result.miss;
