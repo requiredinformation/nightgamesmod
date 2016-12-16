@@ -1375,10 +1375,10 @@ public class GUI extends JFrame implements Observer {
         statusText.setBackground(GUIColors.bgLight);
         statusText.setEditable(false);
         statusText.setContentType("text/html");
-        statusText.setPreferredSize(new Dimension(400, mainPanel.getHeight() / 2));
-        statusText.setMaximumSize(new Dimension(400, mainPanel.getHeight() / 2));
+        statusScroll.setPreferredSize(new Dimension(400, mainPanel.getHeight() / 2));
+        statusScroll.setMaximumSize(new Dimension(400, mainPanel.getHeight() / 2));
         if (width < 720) {
-            statusText.setSize(new Dimension(height, width / 6));
+            statusScroll.setSize(new Dimension(height, width / 6));
         }
         HTMLDocument doc = (HTMLDocument) statusText.getDocument();
         HTMLEditorKit editorKit = (HTMLEditorKit) statusText.getEditorKit();
