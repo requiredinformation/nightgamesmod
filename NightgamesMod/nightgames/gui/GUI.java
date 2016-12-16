@@ -702,7 +702,7 @@ public class GUI extends JFrame implements Observer {
     public void clearPortrait() {
         portrait.setIcon(null);
     }
-    public void loadPortrait(String imagepath) {
+    public int loadPortrait(String imagepath) {
         if (imagepath != null && new File("assets/"+imagepath).canRead()) {
             BufferedImage face = null;
             try {
@@ -725,8 +725,10 @@ public class GUI extends JFrame implements Observer {
                     portrait.setVerticalAlignment(SwingConstants.TOP);
                     System.out.println("Portrait resizing active.");
                 }
+                return 0;
             }
         }
+        return 1;
     }
 
     // portrait loader

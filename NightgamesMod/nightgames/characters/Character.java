@@ -2771,26 +2771,39 @@ public abstract class Character extends Observable implements Cloneable {
 
     public String dumpstats(boolean notableOnly) {
         StringBuilder b = new StringBuilder();
-        b.append("<b>");
-        b.append(name() + ": Level " + getLevel() + "; ");
-        for (Attribute a : att.keySet()) {
-            b.append(a.name() + " " + att.get(a) + ", ");
-        }
-        b.append("</b>");
-        b.append("<br>Max Stamina " + stamina.max() + ", Max Arousal " + arousal.max() + ", Max Mojo " + mojo.max()
-                        + ", Max Willpower " + willpower.max() + ".");
-        b.append("<br>");
+        b.append("<h1>" + name() + "</h1><br>");
         body.describeBodyText(b, this, notableOnly);
+        b.append("<br><br>");
+        b.append("<table>");
+        b.append("<tr><th align='center' colspan='2'>Stats</th></tr>");
+        b.append("<tr><td>Level</td><td>" + getLevel() + "</td></tr>");
+        b.append("<tr><td>Max Stamina</td><td>" + stamina.max() + "</td></tr>");
+        b.append("<tr><td>Max Arousal</td><td>" + arousal.max() + "</td></tr>");
+        b.append("<tr><td>Max Mojo</td><td>" + mojo.max() + "</td></tr>");
+        b.append("<tr><td>Max Willpower</td><td>" + willpower.max() + "</td></tr>");
+        b.append("<tr><td></td><td></td></tr>");
+        List<Attribute> attrs = new ArrayList<>(att.keySet());
+        attrs.sort((first, second) -> first.name().compareTo(second.name()));
+        for (Attribute a : attrs) {
+            b.append("<tr><td>" + a.name() + "</td><td>" + att.get(a) + "</td></tr>");
+        }
+        b.append("</table>");
+        b.append("<br>");
         if (getTraits().size() > 0) {
-            b.append("<br>Traits:<br>");
+            b.append("<br>");
+            b.append("<table>");
+            b.append("<tr><th>Trait:</th><th>Description:</th></tr>");
             List<Trait> traits = new ArrayList<>(getTraits());
             traits.sort((first, second) -> first.toString().compareTo(second.toString()));
             for (Trait t : traits) {
-                b.append(t + ": " + t.getDesc());
-                b.append("<br>");
+                b.append("<tr><td>");
+                b.append(t.toString());
+                b.append("</td><td>");
+                b.append(t.getDesc());
+                b.append("</td></tr>");
             }
+            b.append("</table>");
         }
-        b.append("</p>");
 
         return b.toString();
     }

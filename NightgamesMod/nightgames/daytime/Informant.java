@@ -80,6 +80,7 @@ public class Informant extends Activity {
                                   + "Game for various reasons. For a nominal fee, I could probably convince them to return. Let me know if you're interested in hearing their stories.\"</i>");
             Global.flag(Flag.rank1);
         } else if (choice.equals("Start") || choice.equals("Back")) {
+            Global.gui().clearPortrait();
             Global.gui()
                   .message("The spot where you're suppose to meet Aesop is quiet again. Given the number of people in the Quad during the day, you're starting to feel like people "
                                   + "are intentionally avoiding this bench. You don't have too long to think about it though, Aesop shows up shortly after you do.<br><i>\"It's good to see my favorite client "
@@ -511,15 +512,33 @@ public class Informant extends Activity {
                       .message("You don't have enough money<p>");
             }
         }
+        final String ABOUT_PREFIX = "About ";
         if (choice.equals("Competition Info")) {
-            String message = "<i>\"You want to know how the competition is doing? I can give you a breakdown on each of your opponents:\"</i><p>";
-            for (Character npc : Global.everyone()) {
-                if (!npc.human() && !Global.checkCharacterDisabledFlag(npc)) {
-                    message = message + npc.dumpstats(false) + "<p>";
-                }
+            String message = "<i>\"You want to know how the competition is doing? Just tell me who you want to know about.\"</i>";
+            Global.everyone().stream()
+                  .filter(c -> !c.human())
+                  .forEach(character -> Global.gui().choose(this, String.format(ABOUT_PREFIX + "%s", character.getName())));
+
+            Global.gui().choose(this, "Back");
+            return;
+        }
+        if (choice.startsWith(ABOUT_PREFIX)) {
+            String name = choice.substring(ABOUT_PREFIX.length());
+            String message;
+            Global.everyone().stream()
+                  .filter(c -> !c.human())
+                  .forEach(character -> Global.gui().choose(this, String.format(ABOUT_PREFIX + "%s", character.getName())));
+            Global.gui().choose(this, "Back");
+            Character chr = Global.getCharacterByName(name);
+            message = chr.dumpstats(false);
+            Global.gui().message(message);
+            String portrait = chr.getPortrait(null);
+            if (Global.gui().loadPortrait(portrait) == 0) {
+                Global.gui().showPortrait();
+            } else {
+                Global.gui().clearPortrait();
             }
-            Global.gui()
-                  .message(message);
+            return;
         }
         if (choice.equals("Help with Addiction")) {
             Addiction add = Global.getPlayer()
