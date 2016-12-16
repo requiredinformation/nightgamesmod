@@ -1367,6 +1367,7 @@ public class GUI extends JFrame implements Observer {
         // statusText - body, clothing and status description
 
         JTextPane statusText = new JTextPane();
+        JScrollPane statusScroll = new JScrollPane(statusText);
         DefaultCaret caret = (DefaultCaret) statusText.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         statusText.setBackground(GUIColors.bgLight);
@@ -1390,7 +1391,8 @@ public class GUI extends JFrame implements Observer {
             e.printStackTrace();
         }
 
-        currentStatusPanel.add(statusText);
+        statusText.setCaretPosition(0);
+        currentStatusPanel.add(statusScroll);
         if (width < 720) {
             currentStatusPanel.setSize(new Dimension(height, width / 6));
             System.out.println("Oh god so tiny");

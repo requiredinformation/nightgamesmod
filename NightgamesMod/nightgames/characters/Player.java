@@ -23,6 +23,7 @@ import nightgames.characters.body.CockMod;
 import nightgames.characters.body.GenericBodyPart;
 import nightgames.characters.body.PussyPart;
 import nightgames.characters.body.TentaclePart;
+import nightgames.characters.Trait;
 import nightgames.combat.Combat;
 import nightgames.combat.IEncounter;
 import nightgames.combat.Result;
@@ -126,15 +127,6 @@ public class Player extends Character {
     public String describeStatus() {
         StringBuilder b = new StringBuilder();
         body.describeBodyText(b, this, false);
-        if (getTraits().size() > 0) {
-            b.append("<br>Traits:<br>");
-            List<Trait> traits = new ArrayList<>(getTraits());
-            traits.sort((first, second) -> first.toString()
-                                                .compareTo(second.toString()));
-            b.append(traits.stream()
-                           .map(Object::toString)
-                           .collect(Collectors.joining(", ")));
-        }
         if (status.size() > 0) {
             b.append("<br><br>Statuses:<br>");
             List<Status> statuses = new ArrayList<>(status);
@@ -142,6 +134,23 @@ public class Player extends Character {
             b.append(statuses.stream()
                              .map(s -> s.name)
                              .collect(Collectors.joining(", ")));
+        }
+        if (getTraits().size() > 0) {
+            b.append("<br><br>");
+            b.append("<table style='font-size: 8px; font-family: Georgia; color: white'>");
+            b.append("<tr><th>Trait:</th><th>Description:</th></tr>");
+            List<Trait> traits = new ArrayList<>(getTraits());
+            traits.sort((first, second) -> first.toString()
+                                                .compareTo(second.toString()));
+            for (Trait t : traits) {
+                b.append("<tr><td>");
+                b.append(t.toString());
+                b.append("</td><td>");
+                b.append(t.getDesc());
+                b.append("</td></tr>");
+            }
+
+            b.append("</table>");
         }
         return b.toString();
     }
