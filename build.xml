@@ -8,6 +8,7 @@
         <pathelement location="bin"/>
         <pathelement location="NightgamesMod/gson-2.7.jar"/>
         <pathelement location="NightgamesMod/js.jar"/>
+        <pathelement location="NightgamesMod/commons-lang3-3.5.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -47,6 +48,7 @@
             <fileset dir="bin"/>
             <zipfileset excludes="META-INF/*.SF" src="NightgamesMod/gson-2.7.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="NightgamesMod/js.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="NightgamesMod/commons-lang3-3.5.jar"/>
         </jar>
     </target>
 </project>
